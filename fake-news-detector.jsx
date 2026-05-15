@@ -749,9 +749,13 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [ringAnimate, setRingAnimate] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
   const fileRef = useRef();
 
-  const inputEmpty = (tab === "text" && !text.trim()) || (tab === "url" && !url.trim());
+  const inputEmpty =
+    (tab === "text" && !text.trim()) ||
+    (tab === "url" && !url.trim()) ||
+    (tab === "image" && !imageFile);
 
   async function analyze() {
     const content = tab === "text" ? text : tab === "url" ? url : "(image uploaded)";
@@ -825,7 +829,7 @@ Include 2-4 sources or reference points. Be specific and analytical.`;
       <nav className="nav">
         <div className="nav-logo">
           <div className="logo-dot" />
-          VeritasAI
+          FactLens
         </div>
         <div className="nav-right">
           <div className="nav-badge">Live</div>
@@ -887,11 +891,12 @@ Include 2-4 sources or reference points. Be specific and analytical.`;
                 value={url} onChange={e => setUrl(e.target.value)} />
             )}
             {tab === "image" && (
-              <div className="drop-zone" onClick={() => fileRef.current?.click()}>
-                <div className="drop-icon">⬆</div>
-                <div className="drop-text">Drop screenshot here or click to upload</div>
-                <div className="drop-sub">PNG, JPG, WEBP · Max 10MB</div>
-                <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} />
+              <div className="drop-zone" onClick={() => fileRef.current?.click()} style={imageFile ? { borderColor: "rgba(74,222,128,0.5)", background: "rgba(74,222,128,0.03)" } : {}}>
+                <div className="drop-icon">{imageFile ? "✓" : "⬆"}</div>
+                <div className="drop-text">{imageFile ? imageFile.name : "Drop screenshot here or click to upload"}</div>
+                <div className="drop-sub">{imageFile ? `${(imageFile.size / 1024).toFixed(0)} KB · Click to change` : "PNG, JPG, WEBP · Max 10MB"}</div>
+                <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }}
+                  onChange={e => setImageFile(e.target.files?.[0] || null)} />
               </div>
             )}
             <div className="action-row">
@@ -975,7 +980,7 @@ Include 2-4 sources or reference points. Be specific and analytical.`;
       </main>
 
       <footer className="footer">
-        <div className="footer-l">© 2026 VeritasAI · For informational purposes only</div>
+        <div className="footer-l">© 2026 FactLens · For informational purposes only</div>
         <div className="powered">
           <div className="powered-dot" />
           Powered by <span>Claude</span> · Anthropic
