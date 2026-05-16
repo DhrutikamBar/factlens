@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  factlens:
+    build: .
+    container_name: factlens
+    ports:
+      - "3001:3001"
